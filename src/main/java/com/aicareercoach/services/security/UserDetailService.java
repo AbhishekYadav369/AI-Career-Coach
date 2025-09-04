@@ -1,4 +1,7 @@
-package com.aicareercoach.service.security;
+package com.aicareercoach.services.security;
+import com.aicareercoach.model.authentication.UserPrincipal;
+import com.aicareercoach.model.authentication.Users;
+import com.aicareercoach.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDetailService {
+public class UserDetailService implements UserDetailsService {
     private final UserRepository repository;
 
     @Autowired
@@ -19,14 +22,13 @@ public class UserDetailService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        User user= repository.findByUsername(username);
+        Users user= repository.findByUsername(username);
 
         if (user==null) {
             System.out.println("User 404");
             throw new UsernameNotFoundException("User 404");
         }
-        return User;
+        return new UserPrincipal(user);
     }
 
 }

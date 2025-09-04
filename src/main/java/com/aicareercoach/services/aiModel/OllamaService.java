@@ -1,4 +1,4 @@
-package com.aicareercoach.service;
+package com.aicareercoach.services.aiModel;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;

@@ -1,4 +1,4 @@
-package com.aicareercoach.service;
+package com.aicareercoach.services.aiModel;
 
 import com.aicareercoach.model.InitialQuiz.QuizData;
 import org.springframework.ai.chat.prompt.Prompt;
