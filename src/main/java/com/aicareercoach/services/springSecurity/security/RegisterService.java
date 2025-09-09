@@ -1,4 +1,4 @@
-package com.aicareercoach.services.security;
+package com.aicareercoach.services.springSecurity.security;
 
 import com.aicareercoach.model.authentication.Users;
 import com.aicareercoach.repository.UserRepository;

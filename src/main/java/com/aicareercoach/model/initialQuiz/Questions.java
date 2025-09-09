@@ -1,4 +1,4 @@
-package com.aicareercoach.model.InitialQuiz;
+package com.aicareercoach.model.initialQuiz;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

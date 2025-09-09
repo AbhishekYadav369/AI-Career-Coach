@@ -1,4 +1,4 @@
-package com.aicareercoach.services.jwt;
+package com.aicareercoach.services.springSecurity.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
