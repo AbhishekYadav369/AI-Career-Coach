@@ -1,4 +1,4 @@
-package com.aicareercoach.model.InitialQuiz;
+package com.aicareercoach.model.initialQuiz;
 import java.util.List;
 import java.util.Map;
 

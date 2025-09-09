@@ -1,7 +1,7 @@
 package com.aicareercoach.security;
 
-import com.aicareercoach.services.jwt.JwtService;
-import com.aicareercoach.services.security.UserDetailService;
+import com.aicareercoach.services.springSecurity.jwt.JwtService;
+import com.aicareercoach.services.springSecurity.security.UserDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
