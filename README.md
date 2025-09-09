@@ -1,7 +1,6 @@
 ﻿# AI-Career-Coach
 
 # Step1 :Authenticate your self/ Register Yourself
-⚙️ Endpoints
 1. Register a New User : HTTP Method-POST ,Url:/career/register
    
 Registers a new user by saving the user details in the database.
@@ -63,9 +62,9 @@ axios.post("http://localhost:8080/career/login", {
 });
 
 
-#For accessing the main Functionality of the application 
-
+# For accessing the main Functionality of the application 
 ⚙️ Endpoints
+
 1. Submit Initial Quiz
 
 POST /career/initialQuiz/{useCase}
@@ -163,5 +162,6 @@ axios.put("http://localhost:8080/career/initialQuiz");
 
 // Get resume
 axios.get("http://localhost:8080/career/resume");
+
 
 
