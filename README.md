@@ -62,7 +62,7 @@ axios.post("http://localhost:8080/career/login", {
 });
 
 
-# For accessing the main Functionality of the application 
+# Step 2: For accessing the main Functionality of the application 
 ⚙️ Endpoints
 
 1. Submit Initial Quiz
@@ -162,6 +162,7 @@ axios.put("http://localhost:8080/career/initialQuiz");
 
 // Get resume
 axios.get("http://localhost:8080/career/resume");
+
 
 
 
