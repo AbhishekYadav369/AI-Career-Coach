@@ -1,13 +1,11 @@
 package com.aicareercoach.controller;
 
 import com.aicareercoach.model.initialQuiz.QuizData;
-
 import com.aicareercoach.services.aiModel.PromptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 
 
 @RestController
@@ -26,13 +24,12 @@ public class MainEndPoint {
      client and map it to POJO and pass the call to processResponseService.
     */
     @PostMapping("/initialQuiz/{useCase}")
-    public ResponseEntity<String> initialQuiz(@RequestBody QuizData quizData,
-                                              @PathVariable String useCase) {
+    public ResponseEntity<List<?>> initialQuiz(@RequestBody QuizData quizData,
+                                                    @PathVariable String useCase) {
         if (!quizData.getSections().isEmpty() && useCase != null) {
-            String response =promptService.processQuizData(quizData, useCase);
-            return ResponseEntity.ok(response);
+             return ResponseEntity.ok(promptService.processQuizData(quizData, useCase));
         }
-        return ResponseEntity.badRequest().body("Please provide Valid Response.");
+        return ResponseEntity.badRequest().body(List.of("Please provide Valid Response."));
     }
 
 
