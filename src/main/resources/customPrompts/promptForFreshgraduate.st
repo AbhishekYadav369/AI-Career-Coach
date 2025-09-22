@@ -9,8 +9,9 @@ Digitally comfortable - {comfort}
 Career Expolaration -{exploration}.
 
 Suggest most suitable 5 career paths that align with this profile.
-For each career path you suggest, provide a clear, structured analysis including
- the following details:
+For each career path you suggest, provide a clear, structured and balanced analysis including
+ the following details  so I can make an informed decision:
+
 1.Job Profiles – common job titles, roles, and career progression paths in this field.
 2. Eligibility – required qualifications, prior academic performance, or additional skills needed.
 3. Future Scope – growth potential, relevant industries, and long-term opportunities.
@@ -20,4 +21,6 @@ For each career path you suggest, provide a clear, structured analysis including
 7. Courses – recommended free online resources, MOOCs, or open-source learning platforms.
 8. Lifestyle – typical work environment, work-life balance, and daily routine.
 9. Financial Factors – average starting salary, mid-career earnings, cost of courses, and return on investment.
-
+10. Top Companies – leading organizations or sectors that frequently hire for this career path.
+11. Industry Trends – current trends, emerging technologies, and future outlook in the relevant industries.
+12. Pros & Cons – major advantages and challenges associated with this career path.
