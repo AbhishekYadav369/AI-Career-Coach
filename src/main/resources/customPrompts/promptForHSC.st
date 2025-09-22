@@ -6,9 +6,10 @@ Based on the aspects of student:
  LifeStyle & Mobility - {lifeStyle},
  Career Goal and preferences for-{goals}.
 
- Suggest suitable undergraduate courses or diploma specializations,
- professional certifications, or career paths that align with the student’s profile.
-  For each career path, provide a clear, structured analysis including the following aspects:
+ Suggest suitable undergraduate courses or diploma specializations,professional certifications
+  or career paths that align with the student’s profile.
+  For each career path, provide a clear, structured and balanced analysis including the following
+  aspects so i can make an informed decision:
 
  1. Future Scope – potential career opportunities, industries, and long-term growth prospects.
  2. Eligibility – minimum marks, subject requirements, or diploma/degree prerequisites for admission.
@@ -18,7 +19,6 @@ Based on the aspects of student:
  6. Prerequisites – academic background, technical knowledge, or soft skills required before pursuing this path.
  7. Resources Available – online platforms, free/paid learning resources, books, or mentorship opportunities.
  8. Financial Factors – cost of education, scholarships/funding opportunities, and potential salary/ROI in the career.
- 9. Top Colleges – reputed institutions/universities that are best for pursuing this path.
-
-
+ 9. Top Universities – reputed institutions/universities that are best for pursuing this path.
+ 10. Industry Trends – current trends, emerging technologies, and future outlook in the relevant industries.
 

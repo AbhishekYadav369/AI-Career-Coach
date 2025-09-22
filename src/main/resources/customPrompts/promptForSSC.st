@@ -6,8 +6,8 @@ Skilled -  {skills},
 Career Goals and preferences - {goals},
 comfortable - {comfort}.
 
-Based on the student’s interests, strengths, and preferences, suggest 5 most suitable career paths or streams to pursue after Class 10.
-For each career path, provide a clear, structured analysis including the following aspects:
+Based on the student’s interests, strengths, and preferences, suggest 7 most suitable career paths or streams to pursue after Class 10.
+For each career path, provide a clear, structured and balanced analysis including the following aspects so I can make an informed decision:
 
 1. Future Scope – possible career opportunities, industries, and long-term growth prospects.
 2. Eligibility – subject requirements, minimum marks, or stream selection (Science, Commerce, Arts, Vocational).
