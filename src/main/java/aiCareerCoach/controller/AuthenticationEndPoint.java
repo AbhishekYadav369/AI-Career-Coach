@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("career")
 @CrossOrigin("*")
-public class AuthenticAndAuthPoint {
+public class AuthenticationEndPoint {
     /*
      This is controller which accepts Register form react(UI)
      client and map it to POJO and pass the call to UserService.
@@ -23,9 +23,9 @@ public class AuthenticAndAuthPoint {
     private final AuthenticationManager authenticationManager ;
     private final JwtService jwtService ;
     @Autowired
-    public AuthenticAndAuthPoint(RegisterService registerService,
-                                 AuthenticationManager authenticationManager,
-                                 JwtService jwtService) {
+    public AuthenticationEndPoint(RegisterService registerService,
+                                  AuthenticationManager authenticationManager,
+                                  JwtService jwtService) {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.registerService = registerService;

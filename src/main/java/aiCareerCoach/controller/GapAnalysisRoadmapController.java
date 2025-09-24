@@ -16,7 +16,7 @@ public class GapAnalysisRoadmapController {
         this.gapAnalysis = gapAnalysis;
     }
 
-    @GetMapping("/roadMap")
+    @GetMapping("/roadmap")
     public ResponseEntity<SkillsRoadmapResponse> generateRoadMap(@RequestParam String timeline,
                        @RequestParam String quizId, @RequestParam String pathId) {
         if (timeline != null||( quizId!=null && pathId!=null)) {
@@ -26,7 +26,7 @@ public class GapAnalysisRoadmapController {
     }
 
     @PostMapping("/roadmap")
-    public ResponseEntity<String> getRoadMapId(@RequestParam SkillsRoadmapResponse response) {
+    public ResponseEntity<String> getRoadMapId(@RequestBody SkillsRoadmapResponse response) {
         if (response != null) {
             return ResponseEntity.ok( gapAnalysis.getRoadmapId(response));
         }

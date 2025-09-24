@@ -10,10 +10,9 @@ import java.util.Set;
 
 @Service
 public class ExtractingQuizData {
+
     private final PromptService promptService;
     private final QuizResponseService quizResponseService;
-
-    private QuizDataInput quizDataInput;
     private StringBuilder interest=new StringBuilder();
     private StringBuilder skills=new StringBuilder();
     private StringBuilder goals=new StringBuilder();
@@ -28,8 +27,10 @@ public class ExtractingQuizData {
         this.promptService = promptService;
         this.quizResponseService = quizResponseService;
     }
-    // Process the quiz data and generate the appropriate prompt based on the user's grade
-    public List<?> processQuizData(QuizDataInput quizData) {
+
+    // Process the quiz data and call the appropriate prompt generator
+    // based on the user's grade
+    private List<?> processQuizData(QuizDataInput quizData) {
         String useCase = quizData.getGrade();
         Set<String> keys = quizData.getSections().keySet();
         for(String key : keys){
@@ -83,8 +84,7 @@ public class ExtractingQuizData {
 
     // Fetch quiz response by ID form repository and process it to generate a prompt
     public List<?> fetchQuizResponse(String quizId) {
-        quizDataInput= quizResponseService.getQuizResponseById(quizId);
-        return processQuizData(quizDataInput);
+        return processQuizData(quizResponseService.getQuizResponseById(quizId));
     }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class QuizResponseService {
 
+        private QuizDataInput saved;
         private String responseId;
         private final QuizData repository;
 
@@ -15,7 +16,7 @@ public class QuizResponseService {
         }
 
         public String saveQuizResponse(QuizDataInput quizDataInput) {
-            QuizDataInput saved= repository.save(quizDataInput);
+             saved= repository.save(quizDataInput);
             this.responseId=saved.getId();
             return responseId;
         }
@@ -31,6 +32,12 @@ public class QuizResponseService {
     // Check if a quiz response exists for a given ID
          public boolean existsById(String id) {
             return repository.existsById(id);
+         }
+
+
+         public String getGrade(String responseId){
+
+            return repository.findById(responseId).get().getGrade();
          }
 
 }

@@ -1,7 +1,8 @@
 package aiCareerCoach.services.llmModelService;
 
-import aiCareerCoach.model.llmResponseFormat.CareerOptionForGraduates;
-import aiCareerCoach.model.llmResponseFormat.CareerOptionForStudent;
+import aiCareerCoach.model.linkedin.CareerPathConnection;
+import aiCareerCoach.model.careerPath.CareerOptionForGraduates;
+import aiCareerCoach.model.careerPath.CareerOptionForStudent;
 import aiCareerCoach.model.resumeBuilder.ResumeDTO;
 import aiCareerCoach.model.roadmap.SkillsRoadmapResponse;
 import org.springframework.ai.chat.client.ChatClient;
@@ -70,9 +71,17 @@ public class GeminiService {
 
     }
 
+// this return Ai Enhanced json
     public ResumeDTO generateResumeJSON(Prompt prompt) {
         return chatClient.prompt(prompt)
                     .call()
                     .entity(new BeanOutputConverter<>(ResumeDTO.class));
+    }
+
+//this return linkedin connection list based on  career paths
+    public CareerPathConnection getConnections(Prompt prompt) {
+        return chatClient.prompt(prompt)
+                .call()
+                .entity(new BeanOutputConverter<>(CareerPathConnection.class));
     }
 }

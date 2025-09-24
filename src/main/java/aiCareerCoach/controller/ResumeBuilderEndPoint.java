@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+
 @RestController
 @RequestMapping("career")
 @CrossOrigin("*")
@@ -30,9 +32,12 @@ public class ResumeBuilderEndPoint {
     @GetMapping("/resume")
     public ResponseEntity<byte[]> getResume(@RequestParam String id){
         if (id!=null) {
-            return ResponseEntity.ok(resumeService.getResume(id));
+//            return ResponseEntity.ok(resumeService.generateResumeAsFile(id));
+         return  ResponseEntity.ok(resumeService.getResume(id));
         }
         return  ResponseEntity.badRequest().build();
     }
+
+
 
 }

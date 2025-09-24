@@ -1,12 +1,11 @@
 package aiCareerCoach.services.roadmapService;
 
-import aiCareerCoach.model.llmResponseFormat.CareerOptionForGraduates;
-import aiCareerCoach.model.llmResponseFormat.CareerOptionForStudent;
+import aiCareerCoach.model.careerPath.CareerOptionForGraduates;
+import aiCareerCoach.model.careerPath.CareerOptionForStudent;
 import aiCareerCoach.model.quizResponse.QuizDataInput;
 import aiCareerCoach.model.roadmap.SkillsRoadmapResponse;
 import aiCareerCoach.repository.roadmapRepo.RoadmapRepository;
-import aiCareerCoach.services.careerPathService.CareerOptionForGraduateService;
-import aiCareerCoach.services.careerPathService.CareerOptionForStudentService;
+import aiCareerCoach.services.careerPathService.CareerPathService;
 import aiCareerCoach.services.quizService.ExtractingQuizData;
 import aiCareerCoach.services.llmModelService.GeminiService;
 import aiCareerCoach.services.quizService.QuizResponseService;
@@ -26,29 +25,27 @@ public class GapAnalysisAndRoadMap {
     private Resource resource;
     private final RoadmapRepository repository;
     private final QuizResponseService quizResponse;
-    private final CareerOptionForGraduateService careerGraduateService;
-    private final CareerOptionForStudentService careerStudentService;
     private final ExtractingQuizData extractingQuizData;
+    private final CareerPathService service;
 
     private final GeminiService geminiService;
 
     @Autowired
     public GapAnalysisAndRoadMap(QuizResponseService quizResponse,GeminiService geminiService,
-           CareerOptionForStudentService careerStudentService, CareerOptionForGraduateService
-           careerGraduateService,ExtractingQuizData extractingQuizData,
+           CareerPathService service,ExtractingQuizData extractingQuizData,
                                  RoadmapRepository repository) {
         this.geminiService = geminiService;
         this.quizResponse = quizResponse;
-        this.careerStudentService = careerStudentService;
-        this.careerGraduateService = careerGraduateService;
+        this.service = service;
         this.extractingQuizData = extractingQuizData;
         this.repository = repository;
 
     }
+
   /* This method is responsible for fetching QuizResponse and PathResponse and extract skills
       and build a dynamic prompt to analyse skills gaps and generate road map with resources
    * */
-    public SkillsRoadmapResponse analyzeGapsAndGenerateRoadMap(String timeline,String quizId,String responseId) {
+    public SkillsRoadmapResponse analyzeGapsAndGenerateRoadMap(String timeline,String quizId,String pathId) {
         QuizDataInput quizInput = quizResponse.getQuizResponseById(quizId);
         String oldSkillsKey = quizInput.getSections()
                 .keySet().stream()
@@ -60,12 +57,12 @@ public class GapAnalysisAndRoadMap {
         String requiredSkills;
         String careerPath;
     if(!quizInput.getGrade().equalsIgnoreCase("GRADUATE")) {
-        CareerOptionForStudent student = careerStudentService.getCareerOptionById(responseId);
+        CareerOptionForStudent student = service.getCareerOptions(pathId).getPathForStudent().getLast();
          requiredSkills = student.getRequiredSkills();
          careerPath = student.getCareerPath();
     }
     else{
-        CareerOptionForGraduates graduate = careerGraduateService.getCareerOptionById(responseId);
+        CareerOptionForGraduates graduate = service.getCareerOptions(pathId).getPathForGraduate().getLast();
         requiredSkills = graduate.getRequiredSkills();
         careerPath = graduate.getCareerPath();
     }

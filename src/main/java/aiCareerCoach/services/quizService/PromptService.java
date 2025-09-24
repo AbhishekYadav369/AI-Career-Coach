@@ -1,6 +1,5 @@
 package aiCareerCoach.services.quizService;
 
-import aiCareerCoach.model.quizResponse.QuizDataInput;
 import aiCareerCoach.services.llmModelService.GeminiService;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
@@ -17,21 +16,20 @@ import java.util.Map;
 
 @Service
 public class PromptService {
-    private QuizDataInput quizDataInput;
-
     private final GeminiService geminiService;
-    private final ResourceLoader resourceLoader;
+    private final ResourceLoader loader;
+    private final QuizResponseService quizResponseService;
 
     @Autowired
-    public PromptService(GeminiService geminiService, ResourceLoader resourceLoader,
-                         QuizResponseService quizResponseService) {
-        this.resourceLoader = resourceLoader;
+    public PromptService(GeminiService geminiService, ResourceLoader loader,
+                          QuizResponseService quizResponseService) {
+        this.loader = loader;
         this.geminiService = geminiService;
-
+        this.quizResponseService = quizResponseService;
     }
 
     public List<?> getPromptForCollege(String interest, String skills, String goals, String comfort, String lifestyle) {
-        Resource resource = resourceLoader.getResource("classpath:/customPrompts/promptForHSC.st");
+        Resource resource = loader.getResource("classpath:/customPrompts/promptForHSC.st");
         PromptTemplate promptTemplate = new PromptTemplate(resource);
 
       Prompt prompt = promptTemplate.create(Map.of(
@@ -46,7 +44,7 @@ public class PromptService {
 
     public List<?> getPromptForJuniorCollege(String interest, String skills, String goals, String comfort) {
 
-        Resource resource = resourceLoader.getResource("classpath:/customPrompts/promptForSSC.st");
+        Resource resource = loader.getResource("classpath:/customPrompts/promptForSSC.st");
 
         PromptTemplate promptTemplate = new PromptTemplate(resource);
 
@@ -62,7 +60,7 @@ public class PromptService {
     public List<?> getPromptForFreshGraduate(String interest, String skills,String goals,
                                             String comfort,String status,String exploration) {
 
-        Resource resource = resourceLoader.getResource("classpath:/customPrompts/promptForFreshgraduate.st");
+        Resource resource = loader.getResource("classpath:/customPrompts/promptForFreshgraduate.st");
         PromptTemplate promptTemplate = new PromptTemplate(resource);
 
         Prompt prompt= promptTemplate.create(Map.of(
@@ -76,11 +74,11 @@ public class PromptService {
 
 
     // This method can be implemented to handle user responses for feedback to llm response
-    public List<?> userFeedbackForLlm(String feedback) {
+    public List<?> userFeedbackForLlm(String feedback,String quizId) {
         Prompt prompt;
-        String useCase = getUseCase();
+        String useCase = quizResponseService.getGrade(quizId);
         if (!feedback.equalsIgnoreCase("more")) {
-                Resource resource = resourceLoader.getResource("classpath:/customPrompts/userFeedback.st");
+                Resource resource = loader.getResource("classpath:/customPrompts/userFeedback.st");
                 PromptTemplate promptTemplate = new PromptTemplate(resource);
                 prompt = promptTemplate.create(Map.of(
                     "careerPath", feedback));
@@ -99,10 +97,5 @@ public class PromptService {
 
     }
 
-
-    // Get the use case (grade) from the quiz data input
-    public String getUseCase(){
-        return quizDataInput.getGrade();
-    }
 }
 
