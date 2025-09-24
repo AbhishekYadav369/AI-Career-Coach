@@ -10,8 +10,27 @@ public class PersonalInformation {
     private String linkedIn;
     private String gitHub;
     private String portfolio;
+    private String jobTitle;
+    private String summary;
 
     //Getters & Setters
+
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 
     public String getEmail() { return email;}
 
@@ -51,6 +70,8 @@ public class PersonalInformation {
                 ", linkedIn= " + linkedIn  +
                 ", gitHub= " + gitHub +
                 ", portfolio= " + portfolio +
+                ",jobTitle= "+ jobTitle +
+                ",summary= "+summary +
                 '}';
     }
 }

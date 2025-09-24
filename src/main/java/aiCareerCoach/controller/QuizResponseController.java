@@ -1,8 +1,10 @@
 package aiCareerCoach.controller;
 
+import aiCareerCoach.model.careerPath.CareerOptionForGraduates;
+import aiCareerCoach.model.careerPath.CareerOptionForStudent;
+import aiCareerCoach.model.careerPath.CareerPathWrapper;
 import aiCareerCoach.model.quizResponse.QuizDataInput;
-import aiCareerCoach.services.careerPathService.CareerOptionForStudentService;
-import aiCareerCoach.services.careerPathService.CareerOptionForGraduateService;
+import aiCareerCoach.services.careerPathService.CareerPathService;
 import aiCareerCoach.services.quizService.ExtractingQuizData;
 import aiCareerCoach.services.quizService.QuizResponseService;
 import aiCareerCoach.services.quizService.PromptService;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * MainEndPoint is a REST controller that handles HTTP requests related to career coaching functionalities.
  * It provides endpoints for initial quizzes, resume generation, industry connections, roadmaps, and mock interviews.
@@ -24,17 +28,18 @@ public class QuizResponseController {
     private final PromptService promptService;
     private final ExtractingQuizData extractingQuizData;
     private final QuizResponseService quizResponseService;
-    private final CareerOptionForGraduateService service;
-    private final CareerOptionForStudentService studentService;
+    private final CareerPathWrapper wrapper;
+    private final CareerPathService careerPathService;
 
 
     @Autowired
-    public QuizResponseController(PromptService promptService,ExtractingQuizData extractingQuizData,QuizResponseService quizResponseService,
-           CareerOptionForGraduateService service, CareerOptionForStudentService studentService ) {
+    public QuizResponseController(PromptService promptService,ExtractingQuizData
+                       extractingQuizData,QuizResponseService quizResponseService,
+                    CareerPathWrapper wrapper,CareerPathService careerPathService ) {
         this.promptService = promptService;
         this.quizResponseService = quizResponseService;
-        this.service = service;
-        this.studentService = studentService;
+        this.wrapper = wrapper;
+        this.careerPathService = careerPathService;
         this.extractingQuizData = extractingQuizData;
     }
 
@@ -56,25 +61,36 @@ public class QuizResponseController {
 
 
     @GetMapping("/paths")
-    public ResponseEntity<List<?>>finalizePath(@RequestParam String feedback){
+    public ResponseEntity<List<?>>finalizePath(@RequestParam String feedback
+            ,@RequestParam String quizId){
         if (feedback!= null ) {
-            List<?> response= promptService.userFeedbackForLlm(feedback);
+            if (feedback.equalsIgnoreCase("more")) {
+                return ResponseEntity.ok(promptService
+                        .userFeedbackForLlm(feedback, quizId));
+            } else {
+                List<?> response = promptService.userFeedbackForLlm(feedback, quizId);
+                if (quizResponseService.getGrade(quizId).equalsIgnoreCase("GRADUATE")) {
+                    wrapper.setPathForGraduate(response.stream()
+                            .filter(CareerOptionForGraduates.class::isInstance) // keep only valid ones
+                            .map(CareerOptionForGraduates.class::cast)          // cast safely
+                            .collect(Collectors.toList()));
+                    return ResponseEntity.ok(List.of(careerPathService.saveCareerOption(wrapper)));
 
-            if(feedback.equalsIgnoreCase("more"))
-                return ResponseEntity.ok(response);
-            else{
-                   if (promptService.getUseCase().equalsIgnoreCase("GRADUATE"))
-                        return ResponseEntity.ok(List.of(service.
-                                 saveCareerOption(response)));
+                }
 
-                else
-                    return ResponseEntity.ok(List.of(studentService.
-                            saveCareerOption(response)));
+
+                wrapper.setPathForStudent(response.stream()
+                        .filter(CareerOptionForStudent.class::isInstance) // keep only valid ones
+                        .map(CareerOptionForStudent.class::cast)          // cast safely
+                        .collect(Collectors.toList()));
+                return ResponseEntity.ok(List.of(careerPathService.saveCareerOption(wrapper)));
+
             }
-
         }
+
         return ResponseEntity.badRequest().build();
     }
 
-
 }
+
+

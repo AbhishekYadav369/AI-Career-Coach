@@ -3,8 +3,8 @@ even if some values are empty or null. Use the exact keys provided below and mai
 
 JSON Structure Requirements:
 personalInformation: {personalInformation}
-Keys:fullName,email,phoneNumber,location,linkedIn,gitHub,portfolio,
-summary (brief overview of skills, experience, career goals).
+Keys:fullName,email,phoneNumber,location,linkedIn,gitHub,portfolio,jobTitle,
+summary (brief 2 to 3 line overview on skills, experience, career goals and projects).
 
 skills: {Skills}
 Keys:title,level.

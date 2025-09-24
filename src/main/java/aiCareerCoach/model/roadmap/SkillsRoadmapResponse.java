@@ -12,11 +12,19 @@ public class SkillsRoadmapResponse {
 
     @Id
     private String id;  // Auto-generated MongoDB _id
-
+    private String path;
     private List<String> skillsIHave;
     private List<String> skillsGap;
     private List<RoadmapItem> roadmap;
 
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
     public static class RoadmapItem {
         private String month;
