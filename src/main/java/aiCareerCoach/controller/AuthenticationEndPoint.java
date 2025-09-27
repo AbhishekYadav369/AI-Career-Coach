@@ -3,7 +3,7 @@ package aiCareerCoach.controller;
 import aiCareerCoach.model.userInfo.Users;
 
 import aiCareerCoach.security.jwt.JwtService;
-import aiCareerCoach.security.security.RegisterService;
+import aiCareerCoach.security.securityService.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

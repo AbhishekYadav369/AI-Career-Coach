@@ -1,4 +1,4 @@
-package aiCareerCoach.security;
+package aiCareerCoach.security.principal;
 import java.util.Collection;
 import java.util.Collections;
 

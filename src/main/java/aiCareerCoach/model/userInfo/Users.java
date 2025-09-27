@@ -1,47 +1,47 @@
 package aiCareerCoach.model.userInfo;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 
 /*
-    Users entity to represent user data in the database.
-    Fields include id, username, password, and role.
+    Users document to represent user data in MongoDB.
+    Fields include id, username, and password.
 */
-@Entity
+@Document(collection = "users")
 public class Users {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int id;
+    private String id;   // MongoDB uses String/ObjectId for IDs
+    @Indexed(unique = true)
     private String username;
     private String password;
 
+    @CreatedDate
+    private LocalDateTime createdAt;  // system time at creation
 
-    public Users(int id, String password, String username) {
+    @LastModifiedDate
+    private LocalDateTime updatedAt;  // system time on update
+
+    public Users(String id, String username, String password) {
         this.id = id;
-        this.password = password;
-
         this.username = username;
+        this.password = password;
     }
+
     public Users() {
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getUsername() {
@@ -52,4 +52,11 @@ public class Users {
         this.username = username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
