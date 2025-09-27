@@ -1,6 +1,6 @@
 package aiCareerCoach.security.jwt;
 
-import aiCareerCoach.security.security.UserDetailService;
+import aiCareerCoach.security.securityService.UserDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

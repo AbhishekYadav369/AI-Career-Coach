@@ -1,7 +1,7 @@
-package aiCareerCoach.security.security;
-import aiCareerCoach.security.UserPrincipal;
+package aiCareerCoach.security.securityService;
+import aiCareerCoach.security.principal.UserPrincipal;
 import aiCareerCoach.model.userInfo.Users;
-import aiCareerCoach.repository.userData.UserRepository;
+import aiCareerCoach.security.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +25,6 @@ public class UserDetailService implements UserDetailsService {
         Users user= repository.findByUsername(username);
 
         if (user==null) {
-            System.out.println("User 404");
             throw new UsernameNotFoundException("User 404");
         }
         return new UserPrincipal(user);
