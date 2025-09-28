@@ -4,10 +4,9 @@ import aiCareerCoach.model.careerPath.CareerOptionForGraduates;
 import aiCareerCoach.model.careerPath.CareerOptionForStudent;
 import aiCareerCoach.model.careerPath.CareerPathWrapper;
 import aiCareerCoach.model.quizResponse.QuizDataInput;
-import aiCareerCoach.services.careerPathService.CareerPathService;
 import aiCareerCoach.services.quizService.ExtractingQuizData;
-import aiCareerCoach.services.quizService.QuizResponseService;
 import aiCareerCoach.services.quizService.PromptService;
+import aiCareerCoach.services.userServiceApp.UserDataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,63 +26,65 @@ import java.util.stream.Collectors;
 public class QuizResponseController {
     private final PromptService promptService;
     private final ExtractingQuizData extractingQuizData;
-    private final QuizResponseService quizResponseService;
     private final CareerPathWrapper wrapper;
-    private final CareerPathService careerPathService;
+    private  final UserDataWrapper userData;
 
 
     @Autowired
-    public QuizResponseController(PromptService promptService,ExtractingQuizData
-                       extractingQuizData,QuizResponseService quizResponseService,
-                    CareerPathWrapper wrapper,CareerPathService careerPathService ) {
+    public QuizResponseController(PromptService promptService,ExtractingQuizData extractingQuizData,
+                                  CareerPathWrapper wrapper,UserDataWrapper userData){
         this.promptService = promptService;
-        this.quizResponseService = quizResponseService;
         this.wrapper = wrapper;
-        this.careerPathService = careerPathService;
         this.extractingQuizData = extractingQuizData;
+        this.userData = userData;
     }
 
-   @PostMapping("/paths")
-    public ResponseEntity<List<?>> getCareerPaths(@RequestParam String quizId) {
-        if (quizId!= null && quizResponseService.existsById(quizId)) {
-            return ResponseEntity.ok(extractingQuizData.fetchQuizResponse(quizId));
-        }
-        return ResponseEntity.badRequest().build();
-    }
 
     @PostMapping("/quizData")
-    public ResponseEntity<String>saveQuizResponse(@RequestBody QuizDataInput quiz){
-        if(!quiz.getSections().isEmpty()){
-            return ResponseEntity.ok(quizResponseService.saveQuizResponse(quiz));
+    public ResponseEntity<String>saveQuizResponse(@RequestBody QuizDataInput quiz,
+                                                  @RequestParam String userId) {
+        if(!quiz.getSections().isEmpty()&& userData.checkUserById(userId)){
+                userData.saveQuizData(quiz,userId);
+                return ResponseEntity.ok("User Data Recorded Successfully !");
         }
         return ResponseEntity.badRequest().build();
     }
 
-
     @GetMapping("/paths")
+    public ResponseEntity<List<?>> getCareerPaths(@RequestParam String userId) {
+        if (userData.checkUserById(userId)) {
+            return ResponseEntity.ok(extractingQuizData.processQuizData
+                    (userData.getUser(userId).getQuizResponse()));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/paths")
     public ResponseEntity<List<?>>finalizePath(@RequestParam String feedback
-            ,@RequestParam String quizId){
+            ,@RequestParam String userId){
         if (feedback!= null ) {
+            String grade=userData.getUser(userId).getQuizResponse().getGrade();
             if (feedback.equalsIgnoreCase("more")) {
                 return ResponseEntity.ok(promptService
-                        .userFeedbackForLlm(feedback, quizId));
+                        .userFeedbackForLlm(feedback, grade));
             } else {
-                List<?> response = promptService.userFeedbackForLlm(feedback, quizId);
-                if (quizResponseService.getGrade(quizId).equalsIgnoreCase("GRADUATE")) {
+                List<?> response = promptService.userFeedbackForLlm(feedback, grade);
+                if (grade.equalsIgnoreCase("GRADUATE")) {
                     wrapper.setPathForGraduate(response.stream()
                             .filter(CareerOptionForGraduates.class::isInstance) // keep only valid ones
                             .map(CareerOptionForGraduates.class::cast)          // cast safely
                             .collect(Collectors.toList()));
-                    return ResponseEntity.ok(List.of(careerPathService.saveCareerOption(wrapper)));
+                    userData.saveCareerPath(wrapper, userId);
+                    return ResponseEntity.ok(List.of("Career Path for :"+ feedback +" is recorded successfully !"));
 
                 }
-
 
                 wrapper.setPathForStudent(response.stream()
                         .filter(CareerOptionForStudent.class::isInstance) // keep only valid ones
                         .map(CareerOptionForStudent.class::cast)          // cast safely
                         .collect(Collectors.toList()));
-                return ResponseEntity.ok(List.of(careerPathService.saveCareerOption(wrapper)));
+                userData.saveCareerPath(wrapper, userId);
+                return ResponseEntity.ok(List.of("Career Path for :"+ feedback +" is recorded successfully !"));
 
             }
         }

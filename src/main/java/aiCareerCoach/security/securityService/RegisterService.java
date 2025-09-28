@@ -1,7 +1,7 @@
 //package aiCareerCoach.security.security;
 //
 //import aiCareerCoach.model.userInfo.Users;
-//import aiCareerCoach.security.UserRepository;
+//import aiCareerCoach.repository.users.UserRepository;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@
 package aiCareerCoach.security.securityService;
 
 import aiCareerCoach.model.userInfo.Users;
-import aiCareerCoach.security.UserRepository;
+import aiCareerCoach.repository.users.UserRepository;
 import aiCareerCoach.security.principal.UsernameAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;

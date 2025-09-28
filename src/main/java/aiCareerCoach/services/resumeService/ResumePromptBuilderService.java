@@ -35,7 +35,8 @@ public class ResumePromptBuilderService {
         return sb.toString();
     }
 
-        public String generateResumePrompt(ResumeDTO dto, String careerPath) {
+        public String generateResumePrompt(ResumeDTO dto,String careerPath ,String userId) {
+
             PersonalInformation personalInfo = dto.getPersonalInformation();
             List<Achievement> achievement = dto.getAchievements();
             List<Certification> certification = dto.getCertifications();
@@ -63,7 +64,7 @@ public class ResumePromptBuilderService {
 
             // Call LLM → directly mapped to ResumeDTO using BeanOutputConverter
             try {
-               return resumeService.generateAndSaveResume(geminiService.generateResumeJSON(prompt), careerPath);
+               return resumeService.generateAndSaveResume(geminiService.generateResumeJSON(prompt), careerPath,userId);
             } catch (Exception e) {
                 return "Resume generation failed"+e.getMessage();
             }
