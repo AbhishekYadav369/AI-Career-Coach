@@ -3,29 +3,23 @@ package aiCareerCoach.services.resumeService;
 import aiCareerCoach.model.resumeBuilder.ResumeDTO;
 import aiCareerCoach.model.resumeBuilder.ResumeWrapper;
 import aiCareerCoach.model.resumeBuilder.fields.*;
-import aiCareerCoach.repository.resumeData.ResumeRepository;
+import aiCareerCoach.services.userServiceApp.UserDataWrapper;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.poi.xwpf.usermodel.*;
-
 import java.io.*;
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Service
 public class ResumeService {
-    private final ResumeRepository repository;
+     private final UserDataWrapper userData;
+
     @Autowired
-    public ResumeService(ResumeRepository repository) {
-        this.repository = repository;
-    }
+    public ResumeService(UserDataWrapper userData)    { this.userData=userData;}
 
-    public String getId(ResumeWrapper resumeWrapper) {
-       return resumeWrapper.getId();
-    }
 
-    public byte[] getResume(String id) {
-        ResumeWrapper resumeWrapper = repository.findById(id).orElse(null);
+    public byte[] getResume(String userId) {
+        ResumeWrapper resumeWrapper = userData.getUser(userId).getResumeWrapper();
         if(resumeWrapper!= null) {
             return resumeWrapper.getAtsDocx();
         }
@@ -33,7 +27,7 @@ public class ResumeService {
 
     }
 
-    public String generateAndSaveResume(ResumeDTO profile, String careerPath) throws Exception {
+    public String generateAndSaveResume(ResumeDTO profile, String careerPath,String userId) throws Exception {
 
                 // 2. Convert to ATS DOCX
                 byte[] docxBytes = convertProfileToDocx(profile);
@@ -43,12 +37,14 @@ public class ResumeService {
                 wrapper.setUserProfile(profile);
                 wrapper.setAtsDocx(docxBytes);
                 wrapper.setCareerPath(careerPath);
-                wrapper.setCreatedAt(LocalDateTime.now().toString());
 
-                return getId(repository.save(wrapper));
+
+               userData.saveResume(wrapper,userId);
+                return "Resume Saved in Database !";
             }
 
     public byte[] convertProfileToDocx(ResumeDTO profile) throws Exception {
+
         XWPFDocument doc = new XWPFDocument();
 
         // ===== HEADER (Name & Job Title) =====
@@ -244,9 +240,9 @@ public class ResumeService {
     /**
      * Generate a DOCX file instead of byte[]
      */
-    public File generateResumeAsFile(String id){
+    public File generateResumeAsFile(String userId) {
         var fileName="resume";
-        ResumeWrapper resumeWrapper = repository.findById(id).orElse(null);
+        ResumeWrapper resumeWrapper = userData.getUser(userId).getResumeWrapper();
         if( resumeWrapper!= null) {
         byte[] docxBytes= resumeWrapper.getAtsDocx();
 

@@ -4,12 +4,15 @@ import aiCareerCoach.model.userInfo.Users;
 
 import aiCareerCoach.security.jwt.JwtService;
 import aiCareerCoach.security.securityService.RegisterService;
+import aiCareerCoach.services.userServiceApp.UserDataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("career")
@@ -22,13 +25,15 @@ public class AuthenticationEndPoint {
     private final RegisterService registerService ;
     private final AuthenticationManager authenticationManager ;
     private final JwtService jwtService ;
+    private final UserDataWrapper userData ;
     @Autowired
-    public AuthenticationEndPoint(RegisterService registerService,
+    public AuthenticationEndPoint(RegisterService registerService,JwtService jwtService,
                                   AuthenticationManager authenticationManager,
-                                  JwtService jwtService) {
+                                UserDataWrapper userData  ) {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.registerService = registerService;
+        this.userData = userData;
     }
     @PostMapping("/register")
     public ResponseEntity<String> registerNewUser(@RequestBody Users user) {
@@ -39,17 +44,23 @@ public class AuthenticationEndPoint {
         return ResponseEntity.badRequest().body("Please provide Valid Response.");
 
     }
+/*
+Client get both bearerToken along with userId
+*/
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody Users   user) {
+    public ResponseEntity<List<String>> loginUser(@RequestBody Users user) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
         if(authentication.isAuthenticated())
-            return ResponseEntity.ok(jwtService.generateToken(user.getUsername()));
+            return ResponseEntity.ok(List.of("BearerToken :"
+                    +jwtService.generateToken(user.getUsername()),
+                    "User ID :"+userData.getUserId(user.getUsername())));
 
-        return ResponseEntity.badRequest().body("Invalid username or password.");
+        return ResponseEntity.badRequest().build();
 
     }
+
 
 }

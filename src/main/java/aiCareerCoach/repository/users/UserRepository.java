@@ -1,4 +1,4 @@
-package aiCareerCoach.security;
+package aiCareerCoach.repository.users;
 
 import aiCareerCoach.model.userInfo.Users;
 import org.springframework.data.mongodb.repository.MongoRepository;

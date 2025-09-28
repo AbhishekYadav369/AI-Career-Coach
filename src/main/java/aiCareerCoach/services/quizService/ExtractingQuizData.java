@@ -12,7 +12,6 @@ import java.util.Set;
 public class ExtractingQuizData {
 
     private final PromptService promptService;
-    private final QuizResponseService quizResponseService;
     private StringBuilder interest=new StringBuilder();
     private StringBuilder skills=new StringBuilder();
     private StringBuilder goals=new StringBuilder();
@@ -22,15 +21,11 @@ public class ExtractingQuizData {
     private StringBuilder exploration=new StringBuilder();
 
     @Autowired
-    public ExtractingQuizData(PromptService promptService,
-                              QuizResponseService quizResponseService) {
-        this.promptService = promptService;
-        this.quizResponseService = quizResponseService;
-    }
+    public ExtractingQuizData(PromptService promptService) { this.promptService = promptService;}
 
     // Process the quiz data and call the appropriate prompt generator
     // based on the user's grade
-    private List<?> processQuizData(QuizDataInput quizData) {
+    public List<?> processQuizData(QuizDataInput quizData) {
         String useCase = quizData.getGrade();
         Set<String> keys = quizData.getSections().keySet();
         for(String key : keys){
@@ -81,10 +76,5 @@ public class ExtractingQuizData {
         return sb;
     }
 
-
-    // Fetch quiz response by ID form repository and process it to generate a prompt
-    public List<?> fetchQuizResponse(String quizId) {
-        return processQuizData(quizResponseService.getQuizResponseById(quizId));
-    }
 
 }

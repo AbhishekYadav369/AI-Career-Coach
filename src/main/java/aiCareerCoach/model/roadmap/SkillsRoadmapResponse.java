@@ -7,11 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 
-@Document(collection = "roadmaps")  // MongoDB collection name
+ // MongoDB collection name
 public class SkillsRoadmapResponse {
 
-    @Id
-    private String id;  // Auto-generated MongoDB _id
+
     private String path;
     private List<String> skillsIHave;
     private List<String> skillsGap;
@@ -63,10 +62,6 @@ public class SkillsRoadmapResponse {
 
         public void setSkill(String skill) { this.skill = skill;}
     }
-
-    public String getId() { return id;}
-
-    public void setId(String id) { this.id = id;}
 
     public List<RoadmapItem> getRoadmap() { return roadmap;}
 

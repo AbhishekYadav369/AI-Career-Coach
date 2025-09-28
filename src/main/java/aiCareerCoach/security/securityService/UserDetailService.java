@@ -1,7 +1,7 @@
 package aiCareerCoach.security.securityService;
 import aiCareerCoach.security.principal.UserPrincipal;
 import aiCareerCoach.model.userInfo.Users;
-import aiCareerCoach.security.UserRepository;
+import aiCareerCoach.repository.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.userdetails.UserDetails;
