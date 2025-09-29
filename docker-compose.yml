@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - s-network
+    environment:
+      # "your_api_key_here"
+      Gemini_AI_KEY: "you ai model key"
+      MONGO_HOST: mongo
+
+
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: ai_career_coach
+    restart: always
+    ports:
+      - "27017:27017"
+    command: ["mongod", "--bind_ip_all", "--noauth"] # disables authentication
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - s-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 15s
+      retries: 5
+      start_period: 5s
+
+networks:
+  s-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+

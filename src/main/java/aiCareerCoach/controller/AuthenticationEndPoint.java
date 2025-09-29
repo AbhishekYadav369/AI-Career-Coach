@@ -59,7 +59,13 @@ Client get both bearerToken along with userId
                     "User ID :"+userData.getUserId(user.getUsername())));
 
         return ResponseEntity.badRequest().build();
-
+    }
+    @GetMapping("/user")
+    public ResponseEntity<Users> getUser(@RequestParam String userId) {
+        if(!userId.isEmpty() && userData.checkUserById(userId)){
+            return ResponseEntity.ok(userData.getUser(userId));
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 

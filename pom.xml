@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.6</version>
+        <version>3.5.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.java.springRest</groupId>
@@ -92,8 +92,16 @@
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-openai</artifactId>
         </dependency>
+<!--    AOP dependency-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
 
-        </dependencies>
+
+
+
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -108,6 +116,7 @@
     </dependencyManagement>
 
     <build>
+        <finalName> AiCareerCoach</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
