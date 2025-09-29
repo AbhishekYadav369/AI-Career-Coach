@@ -1,5 +1,6 @@
 package aiCareerCoach.services.llmModelService;
 
+import aiCareerCoach.aop.LlmServiceUnavailableException;
 import aiCareerCoach.model.linkedin.CareerPathConnection;
 import aiCareerCoach.model.careerPath.CareerOptionForGraduates;
 import aiCareerCoach.model.careerPath.CareerOptionForStudent;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import java.util.List;
-
 @Service
 public class GeminiService {
 
@@ -23,65 +23,59 @@ public class GeminiService {
 
     @Autowired
     public GeminiService(ChatClient.Builder builder) {
-
         ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
         this.chatClient = builder
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build()).build();
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .build();
     }
 
     public List<CareerOptionForStudent> generateResponseForStudent(Prompt prompt) {
-
-        return chatClient.prompt(prompt)
-                .call()
-                .entity(new BeanOutputConverter<List<CareerOptionForStudent>>
-                        (new ParameterizedTypeReference<List<CareerOptionForStudent>>() {
-                        })
-                );
+        try {
+            return chatClient.prompt(prompt)
+                    .call()
+                    .entity(new BeanOutputConverter<>(new ParameterizedTypeReference<List<CareerOptionForStudent>>() {}));
+        } catch (Exception e) {
+            throw new LlmServiceUnavailableException("AI service unavailable for Student response", e);
+        }
     }
 
     public List<CareerOptionForGraduates> generateResponseForGraduate(Prompt prompt) {
-
-        return chatClient.prompt(prompt)
-                .call()
-                .entity(new BeanOutputConverter<List<CareerOptionForGraduates>>
-                        (new ParameterizedTypeReference<List<CareerOptionForGraduates>>() {
-                        })
-                );
-
+        try {
+            return chatClient.prompt(prompt)
+                    .call()
+                    .entity(new BeanOutputConverter<>(new ParameterizedTypeReference<List<CareerOptionForGraduates>>() {}));
+        } catch (Exception e) {
+            throw new LlmServiceUnavailableException("AI service unavailable for Graduate response", e);
+        }
     }
 
     public SkillsRoadmapResponse generateRoadmap(Prompt prompt) {
-
-            // Convert LLM response to POJO
+        try {
             return chatClient.prompt(prompt)
                     .call()
                     .entity(new BeanOutputConverter<>(SkillsRoadmapResponse.class));
-
-
-
-//        ChatResponse chatResponse = chatClient.prompt(prompt)
-//                .call()
-//                .chatResponse();
-//
-//        return Optional.ofNullable(chatResponse)
-//                .map(ChatResponse::getResult)
-//                .map(Generation::getOutput)
-//                .map(AbstractMessage::getText)
-//                .orElse("No response from LLM model");
-
+        } catch (Exception e) {
+            throw new LlmServiceUnavailableException("AI service unavailable for Roadmap", e);
+        }
     }
 
-// this return Ai Enhanced json
     public ResumeDTO generateResumeJSON(Prompt prompt) {
-        return chatClient.prompt(prompt)
+        try {
+            return chatClient.prompt(prompt)
                     .call()
                     .entity(new BeanOutputConverter<>(ResumeDTO.class));
+        } catch (Exception e) {
+            throw new LlmServiceUnavailableException("AI service unavailable for Resume generation", e);
+        }
     }
 
-//this return linkedin connection list based on  career paths
     public CareerPathConnection getConnections(Prompt prompt) {
-        return chatClient.prompt(prompt)
-                .call()
-                .entity(new BeanOutputConverter<>(CareerPathConnection.class));
+        try {
+            return chatClient.prompt(prompt)
+                    .call()
+                    .entity(new BeanOutputConverter<>(CareerPathConnection.class));
+        } catch (Exception e) {
+            throw new LlmServiceUnavailableException("AI service unavailable for Connections", e);
+        }
     }
 }
