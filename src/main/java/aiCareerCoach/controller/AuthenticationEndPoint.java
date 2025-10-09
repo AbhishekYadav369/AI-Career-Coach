@@ -51,7 +51,7 @@ Client get both bearerToken along with userId
 */
 
     @PostMapping("/login")
-    public ResponseEntity<List<Map<String,String>>> loginUser(@RequestBody Users user) {
+    public ResponseEntity<Map<String,String>> loginUser(@RequestBody Users user) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
