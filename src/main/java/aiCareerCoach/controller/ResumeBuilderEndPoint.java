@@ -23,23 +23,12 @@ public class ResumeBuilderEndPoint {
     }
 
     @PostMapping("/resume")
-    public ResponseEntity<String> generateResume(@RequestBody ResumeDTO resumeDTO,
+    public ResponseEntity<byte[]> generateResume(@RequestBody ResumeDTO resumeDTO,
                       @RequestParam String careerPath,@RequestParam String userId) throws Exception {
         if (!userId.isEmpty()) {
-            return ResponseEntity.ok(resumePrompt.generateResumePrompt(resumeDTO,careerPath,userId));
+             resumePrompt.generateResumePrompt(resumeDTO,careerPath,userId);
+           return ResponseEntity.ok(resumeService.getResume(userId));
         }
         return ResponseEntity.badRequest().build();
     }
-
-    @GetMapping("/resume")
-    public ResponseEntity<byte[]> getResume(@RequestParam String userId){
-        if (userId!=null) {
-//            resumeService.generateResumeAsFile(userId);
-         return  ResponseEntity.ok(resumeService.getResume(userId));
-        }
-        return  ResponseEntity.badRequest().build();
-    }
-
-
-
 }
