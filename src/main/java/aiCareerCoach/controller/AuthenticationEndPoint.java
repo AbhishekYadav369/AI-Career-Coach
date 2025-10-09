@@ -57,9 +57,9 @@ Client get both bearerToken along with userId
 
         if(authentication.isAuthenticated()){
             Map<String,String> map = new HashMap<>();
-                    map.put("Bearer Token",jwtService.generateToken(user.getUsername()));
-                    map.put("User ID",userData.getUserId(user.getUsername()));
-            return ResponseEntity.ok(List.of(map));
+                    map.put("BearerToken",jwtService.generateToken(user.getUsername()));
+                    map.put("UserId",userData.getUserId(user.getUsername()));
+            return ResponseEntity.ok(map);
         }
         return ResponseEntity.badRequest().build();
     }

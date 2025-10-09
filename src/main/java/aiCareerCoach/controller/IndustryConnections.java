@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("career")
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class IndustryConnections {
     private final CareerPathConnectionService service;
     @Autowired
