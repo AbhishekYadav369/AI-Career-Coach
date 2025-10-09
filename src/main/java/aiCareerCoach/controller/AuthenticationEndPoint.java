@@ -12,7 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("career")
@@ -49,15 +51,16 @@ Client get both bearerToken along with userId
 */
 
     @PostMapping("/login")
-    public ResponseEntity<List<String>> loginUser(@RequestBody Users user) {
+    public ResponseEntity<List<Map<String,String>>> loginUser(@RequestBody Users user) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
-        if(authentication.isAuthenticated())
-            return ResponseEntity.ok(List.of("BearerToken :"
-                    +jwtService.generateToken(user.getUsername()),
-                    "User ID :"+userData.getUserId(user.getUsername())));
-
+        if(authentication.isAuthenticated()){
+            Map<String,String> map = new HashMap<>();
+                    map.put("Bearer Token",jwtService.generateToken(user.getUsername()));
+                    map.put("User ID",userData.getUserId(user.getUsername()));
+            return ResponseEntity.ok(List.of(map));
+        }
         return ResponseEntity.badRequest().build();
     }
     @GetMapping("/user")
